@@ -15,7 +15,7 @@ jobs:
   job-2:
     runs-on: ubuntu-24.04
     steps:
-      - run: "Multiple jobs can run in parallel"
+      - run: echo "Multiple jobs can run in parallel"
   
   job-3:
     runs-on: ubuntu-24.04
