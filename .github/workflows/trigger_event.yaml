@@ -1,0 +1,28 @@
+name: Trigger Event 
+
+
+on:
+  push:
+    branches:
+      - "example/branch/*"
+  
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths: 
+      - "/my-repo/pr-test-dir/*.md"
+      - "/my-repo/pr-test-dir/*.txt"
+  
+  schedule:
+   - cron: "0 0 * * *" #Midnight UTC
+  
+  workflow_dispatch:
+
+
+jobs:
+  echo-event:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "pr test"
