@@ -12,8 +12,8 @@ on:
       - synchronize
       - reopened
     paths: 
-      - "/my-repo/pr-test-dir/*.md"
-      - "/my-repo/pr-test-dir/*.txt"
+      - "pr-test-dir/*.md"
+      - "!pr-test-dir/*.txt"
   
   schedule:
    - cron: "0 0 * * *" #Midnight UTC
