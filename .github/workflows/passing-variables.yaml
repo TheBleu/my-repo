@@ -29,6 +29,7 @@ jobs:
 
   consumer:
     runs-on: ubuntu-24.04
+    needs: producer
     steps:
       - name: importing and checking the values of foo and FOO
         run: |
