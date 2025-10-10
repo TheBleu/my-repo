@@ -32,5 +32,6 @@ jobs:
     steps:
       - name: importing and checking the values of foo and FOO
         run: |
-          echo "value from producer is ${producer.generating-foo.outputs.foo}"
+          echo "value from producer is ${{ needs.producer.outputs.foo }}"
           echo "FOO is: ${FOO:-<UNSET>}"  
+        
