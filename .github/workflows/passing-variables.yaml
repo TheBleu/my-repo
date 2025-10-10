@@ -26,3 +26,11 @@ jobs:
 
           echo "FOO (set via GITHUB_ENV):$FOO"
           echo "foo (set via step output):${{ steps.generate-foo.outputs.foo }}"
+
+  consumer:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: importing and checking the values of foo and FOO
+        run: |
+          echo "value from producer is ${producer.generating-foo.outputs.foo}"
+          echo "FOO is: ${FOO:-<UNSET>}"  
