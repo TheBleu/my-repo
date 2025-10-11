@@ -1,0 +1,37 @@
+name: Artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  artifact-producer:
+    name: produce artifact # the label of the job that will be shown in the ui
+    runs-on: ubuntu-24.04
+    steps:
+      - name: create artifact file #create the artifact file 
+        run: |
+          echo "This is stored as an artifact" >> artifact.txt
+          echo "Generated on $(date)" >> artifact.txt
+      
+      - name: upload artifact file # in this step we are going to upload our artifact we can either download or upload them
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-example # name of the artifact that will be used as a reference for the actions/download-artifact@v4
+          path: artifact.txt # name of the file saved
+  
+  artifact-consumer:
+    name: consume artifact
+    runs-on: ubuntu-24.04
+    needs: artifact-producer
+    steps:
+      - name: Download artifact # in this step we are going to download the artifact that we uploaded earlier for usage in this job
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact-example
+      
+      - name: cat artifact file 
+        run:
+          cat artifact.txt
+
+
+
