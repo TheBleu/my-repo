@@ -1,0 +1,44 @@
+name: caching
+
+on: 
+  workflow_call:
+
+
+jobs:
+  actions-cache:
+    name: demo cache
+    runs-on: ubuntu-24.04
+    steps:
+      #attempte to resotre misses on the first run
+      - name: restore cache 
+        id: demo-cache # an id is used for later use when we need to refernce a job for it's output
+        uses: actions/cache@v4 # this will save cache-hit to false
+        with:
+          path: demo-cache #this will be the name of the folder that we want to cache
+          key: demo-cache-v1 #this will the unique name of the cache
+        
+
+      # populate directory only on miss  
+      - name: populate cache directory
+        if: steps.demo-cache.outputs.cache-hit != 'true'
+        run: |
+          echo "Cache miss >> generating contents..."
+          mkdir -p demo-cache
+          date > demo-cache/time-stamp.txt
+
+      # save cache only if we generated new content
+      - name: save cache
+        if: steps.demo-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4 # in this case since the cache@v4 has set cache-hit to false it will now save cache
+        with:
+          path: demo-cache
+          key: demo-cache-v1
+
+      # verify cache-status
+      - name: verify cache status
+        run: | 
+          echo "cache-hit -> ${{ steps.demo-cache.outputs.cache-hit }}"
+          cat demo-cache/time-stamp.txt
+
+
+        
