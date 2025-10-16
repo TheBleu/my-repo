@@ -1,0 +1,47 @@
+name: matrix and concurrency
+
+
+on:
+  workflow_dispatch:
+    
+
+concurrency:  #this will make it so that all of the workflows that are triggered by a branch cannot have more than one running workflow
+  group: ${{ github.workflow }}-${{ github.ref }} 
+  cancel-in-progress: true
+
+
+
+jobs:
+  matrix-job:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: true
+      matrix:
+        number: [1, 2]
+        letter: [a, b, c]
+        exclude:
+          - number: 1
+            letter: c
+    timeout-minutes: 5
+
+    steps:
+      # always run
+      - name: echo number and letter
+        run: |
+          echo "Number: ${{ matrix.number }}"
+          echo "Letter: ${{ matrix.letter }}"
+
+      - name: run for every combo except letter 2 and c
+        if: ${{ !(matrix.number == 2 && matrix.letter == 'c') }}
+        run: | 
+          echo "This step runs for ${{ matrix.number }}&${{ matrix.letter }}"
+
+  sleep-job:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Sleep (to give time to be canceled)
+        run: sleep 100
+        timeout-minutes: 2
+
+
+        
