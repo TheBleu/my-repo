@@ -1,0 +1,28 @@
+name: 'hello world'
+description: 'greet someone' #both of these lines are meta data for github
+
+inputs:
+  who-to-greet: #this is the id of input
+    description: 'who to greet'
+    required: true 
+    default: world
+
+outputs:
+  random-number:
+    description: 'random number'
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+
+
+runs:
+  using: 'composite' # this is to specify that this is a composite action (we dont use runs-on: because this will inherit the workflow's runner) also to specify that this is composite action (just yaml steps) and not a javascrip action
+  steps:
+    - name: Set Greeting
+      run: echo "Hello $WHO_TO_GREET"
+      shell: bash # we specified the shell because if we dont it will use the worfklow's runner shell ex: windowd > powershell and if you use bash this could break
+      env:
+        WHO_TO_GREET': ${{ inputs.who-to-greet }} #this will be ready before the workflow starts
+    
+    - name: Random Number Generator
+      id: random-number-generator
+      run: echo "random-number=$RANDOM" >> "$GITHUB_OUTPUT"
+      shell: bash
