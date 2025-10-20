@@ -20,7 +20,7 @@ runs:
       run: echo "Hello $WHO_TO_GREET"
       shell: bash # we specified the shell because if we dont it will use the worfklow's runner shell ex: windowd > powershell and if you use bash this could break
       env:
-        WHO_TO_GREET': ${{ inputs.who-to-greet }} #this will be ready before the workflow starts
+        WHO_TO_GREET: ${{ inputs.who-to-greet }} #this will be ready before the workflow starts
     
     - name: Random Number Generator
       id: random-number-generator
